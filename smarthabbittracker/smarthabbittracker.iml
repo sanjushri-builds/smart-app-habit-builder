@@ -1,11 +1,202 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" inherit-compiler-output="true">
-    <exclude-output />
-    <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
-    </content>
-    <orderEntry type="inheritedJdk" />
-    <orderEntry type="sourceFolder" forTests="false" />
-  </component>
-</module>
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Goal {
+    String name;
+    boolean completed;
+
+    Goal(String name) {
+        this.name = name;
+        this.completed = false;
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Goal> goals = new ArrayList<>();
+
+        while (true) {
+
+            System.out.println("\n=================================");
+            System.out.println(" SMART DAILY GOAL TRACKER ");
+            System.out.println("=================================");
+            System.out.println("1. Add Goal");
+            System.out.println("2. View Goals");
+            System.out.println("3. Mark Goal Complete");
+            System.out.println("4. Delete Goal");
+            System.out.println("5. View Statistics");
+            System.out.println("6. Exit");
+            System.out.print("Enter Choice: ");
+
+            int choice;
+
+            try {
+                choice = Integer.parseInt(sc.nextLine());
+            } catch (Exception e) {
+                System.out.println("Please enter a valid number.");
+                continue;
+            }
+
+            switch (choice) {
+
+                case 1:
+                    System.out.print("Enter Goal: ");
+                    String goalName = sc.nextLine();
+
+                    goals.add(new Goal(goalName));
+
+                    System.out.println("Goal Added Successfully!");
+                    break;
+
+                case 2:
+
+                    if (goals.isEmpty()) {
+                        System.out.println("No goals available.");
+                    } else {
+
+                        System.out.println("\nYOUR GOALS");
+
+                        for (int i = 0; i < goals.size(); i++) {
+
+                            Goal g = goals.get(i);
+
+                            String status;
+
+                            if (g.completed) {
+                                status = "Completed";
+                            } else {
+                                status = "Pending";
+                            }
+
+                            System.out.println(
+                                    (i + 1) + ". " + g.name + " [" + status + "]");
+                        }
+                    }
+
+                    break;
+
+                case 3:
+
+                    if (goals.isEmpty()) {
+                        System.out.println("No goals available.");
+                        break;
+                    }
+
+                    System.out.println("\nSelect Goal Number:");
+
+                    for (int i = 0; i < goals.size(); i++) {
+                        System.out.println((i + 1) + ". " + goals.get(i).name);
+                    }
+
+                    try {
+
+                        int index =
+                                Integer.parseInt(sc.nextLine()) - 1;
+
+                        if (index >= 0 && index < goals.size()) {
+
+                            goals.get(index).completed = true;
+
+                            System.out.println(
+                                    "Goal Marked As Completed!");
+
+                        } else {
+
+                            System.out.println("Invalid Goal Number.");
+                        }
+
+                    } catch (Exception e) {
+
+                        System.out.println("Invalid Input.");
+                    }
+
+                    break;
+
+                case 4:
+
+                    if (goals.isEmpty()) {
+                        System.out.println("No goals available.");
+                        break;
+                    }
+
+                    System.out.println("\nSelect Goal Number To Delete:");
+
+                    for (int i = 0; i < goals.size(); i++) {
+                        System.out.println((i + 1) + ". " + goals.get(i).name);
+                    }
+
+                    try {
+
+                        int deleteIndex =
+                                Integer.parseInt(sc.nextLine()) - 1;
+
+                        if (deleteIndex >= 0 &&
+                                deleteIndex < goals.size()) {
+
+                            goals.remove(deleteIndex);
+
+                            System.out.println(
+                                    "Goal Deleted Successfully!");
+
+                        } else {
+
+                            System.out.println("Invalid Goal Number.");
+                        }
+
+                    } catch (Exception e) {
+
+                        System.out.println("Invalid Input.");
+                    }
+
+                    break;
+
+                case 5:
+
+                    int completedGoals = 0;
+
+                    for (Goal g : goals) {
+
+                        if (g.completed) {
+                            completedGoals++;
+                        }
+                    }
+
+                    int totalGoals = goals.size();
+
+                    double percentage = 0;
+
+                    if (totalGoals > 0) {
+
+                        percentage =
+                                ((double) completedGoals / totalGoals) * 100;
+                    }
+
+                    System.out.println("\n===== STATISTICS =====");
+                    System.out.println("Total Goals      : " + totalGoals);
+                    System.out.println("Completed Goals  : " + completedGoals);
+                    System.out.println("Pending Goals    : "
+                            + (totalGoals - completedGoals));
+
+                    System.out.printf(
+                            "Completion Rate  : %.2f%%\n",
+                            percentage);
+
+                    break;
+
+                case 6:
+
+                    System.out.println(
+                            "Thank you for using Smart Daily Goal Tracker!");
+
+                    sc.close();
+                    System.exit(0);
+
+                default:
+                    System.out.println("Invalid Choice.");
+            }
+        }
+    }
+}
